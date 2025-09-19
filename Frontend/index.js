@@ -136,14 +136,7 @@ function addCard() {
     headers: {
       "Content-type": "application/json"
     },
-    body: JSON.stringify({Question: NewQuestionVal})
-  })
-  fetch("http://localhost:3000/UpdateAnswers", {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json"
-    },
-    body: JSON.stringify({Answer: newAnswerVal})
+    body: JSON.stringify({Question: NewQuestionVal, Answer: newAnswerVal})
   })
   CardNum.innerHTML = `${i} card out of ${index}`
 }
@@ -153,8 +146,18 @@ function Remove() {
     info.innerHTML = "You can't delete all cards"
   }
   else {
+    let removedQuestion = Qlist[CardI]
+    let removedAnswer = Alist[CardI]
+    fetch("http://localhost:3000/DeleteQuestion", {
+      method:"DELETE",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({CardIndex: CardI})
+    })
     Qlist.splice(CardI, 1)
     Alist.splice(CardI, 1)
+
     
     CardI++
     if (CardI < 0) {
@@ -165,6 +168,8 @@ function Remove() {
       pre()
       i++
     }
+
+
     index--
     fetch("http://localhost:3000/UpdateIndex", {
     method: "PUT",
